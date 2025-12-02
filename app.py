@@ -1,12 +1,13 @@
 import streamlit as st
 import plotly.express as px
 import pandas as pd
+from helper import get_data
 
 st.set_page_config(page_title="Dashboard example", 
     page_icon="🤩",
     )
 
-tab1, tab2, tab3 = st.tabs(["Welcome", "Bubble Chart", "Bar Chart"])
+tab1, tab2, tab3 , tab4 = st.tabs(["Welcome", "Bubble Chart", "Bar Chart", "From BigQuery"])
 
 # Sample Data
 df = px.data.gapminder()
@@ -57,5 +58,32 @@ with tab3:
     )
 
     st.plotly_chart(fig2)
-  
+
+with tab4:
+    sales_df = get_data()
+    st.write("Data preview:", sales_df.head())
+    
+    # ----------------------------------------------------
+    # Plotly Line Chart
+    # ----------------------------------------------------
+    line_fig = px.line(
+        sales_df,
+        x="month",
+        y="total_orders",
+        title="Line Chart"
+    )
+    st.plotly_chart(line_fig, use_container_width=True)
+
+    # ----------------------------------------------------
+    # Plotly Scatter Plot
+    # ----------------------------------------------------
+    scatter_fig = px.scatter(
+        sales_df,
+        x="month",
+        y="nb_users",
+        title="Scatter Plot"
+    )
+    st.plotly_chart(scatter_fig, use_container_width=True)
+
+    
 

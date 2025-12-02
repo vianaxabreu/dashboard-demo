@@ -3,7 +3,7 @@ import plotly.express as px
 import pandas as pd
 from helper import get_data
 
-st.set_page_config(page_title="Dashboard example", 
+st.set_page_config(page_title="Dashboard Example", 
     page_icon="🤩",
     )
 

@@ -3,6 +3,7 @@ import pandas as pd
 import plotly.express as px
 
 from google.oauth2 import service_account
+from google.oauth2.credentials import Credentials
 from google.cloud import bigquery
 
 def get_data():
@@ -36,3 +37,32 @@ def get_data():
 
     df = client.query(query, location="EU").to_dataframe()
     return df
+
+def get_user_query(email):
+
+
+    # ----------------------------------------------------
+    # Load credentials from Streamlit secrets (very safe)
+    # ----------------------------------------------------
+    credentials = service_account.Credentials.from_service_account_info(
+        st.secrets["gcp_service_account"]
+    )
+
+    client = bigquery.Client(
+        credentials=credentials,
+        project=st.secrets["project_id_"],
+    )
+
+    client = bigquery.Client(credentials=credentials, project=st.secrets["project_id_"])
+
+    # use the email to filter the query later
+    query = f"""
+        SELECT
+
+        SESSION_USER() AS run_by
+    """
+    job_query = client.query(query, location="EU")
+    job_query.result()
+
+    user_email = job_query.user_email
+    return user_email

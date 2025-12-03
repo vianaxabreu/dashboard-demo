@@ -1,13 +1,13 @@
 import streamlit as st
 import plotly.express as px
 import pandas as pd
-from helper import get_data
+from helper import get_data, get_user_query
 
 st.set_page_config(page_title="Dashboard Example", 
-    page_icon="🤩",
+    page_icon=":alphabet-white-a:",
     )
 
-tab1, tab2, tab3 , tab4 = st.tabs(["Welcome", "Bubble Chart", "Bar Chart", "From BigQuery"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["Welcome", "Bubble Chart", "Bar Chart", "From BigQuery", "Login"])
 
 # Sample Data
 df = px.data.gapminder()
@@ -85,6 +85,22 @@ with tab4:
         title="Scatter Plot"
     )
     st.plotly_chart(scatter_fig, use_container_width=True)
+
+with tab5:
+    def login_screen():
+        st.header("Hey Stranger, what about logging in?")
+        st.subheader("Please log in.")
+        st.button("Log in with Google", on_click=st.login)
+
+    if not st.user.is_logged_in:
+        login_screen()
+    else:
+        st.header(f"Welcome, {st.user.name}!")
+        #st.write(get_user_query(st.user.email))
+        image_url = st.user.picture
+        #st.write(image_url)
+        st.image(image_url, caption="Loaded from URL", width=96)
+        st.button("Log out", on_click=st.logout)
 
     
 

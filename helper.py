@@ -15,24 +15,24 @@ def get_data():
 
     client = bigquery.Client(
         credentials=credentials,
-        project=st.secrets["gcp_service_account"]["project_id"],
+        project=st.secrets["project_id_"],
     )
 
     # ----------------------------------------------------
     # Query BigQuery
     # ----------------------------------------------------
-    PROJECT_ID = st.secrets["gcp_service_account"]["project_id"]
-    DATASET = "jaffle_shop"
-    TABLE = "orders"
-
+    PROJECT_ID = st.secrets["project_id_"]
+    DATASET = "dbt_day02_prod_finance"
+    TABLE = "mart_finance_campaigns_month"
+    
     query = f"""
-    SELECT 
-    extract(MONTH FROM ORDER_DATE) as month,
-    count(distinct ID) as total_orders,
-    count(distinct USER_ID) as nb_users
-    FROM `{PROJECT_ID}.{DATASET}.{TABLE}`
-    GROUP BY month
+        SELECT 
+        FORMAT_DATE('%b %Y', datemonth) as month,
+        average_basket,
+        revenue
+        FROM `{PROJECT_ID}.{DATASET}.{TABLE}`
+        order by datemonth asc
     """
 
-    df = client.query(query).to_dataframe()
+    df = client.query(query, location="EU").to_dataframe()
     return df

@@ -11,6 +11,7 @@ tab1, tab2, tab3 , tab4 = st.tabs(["Welcome", "Bubble Chart", "Bar Chart", "From
 
 # Sample Data
 df = px.data.gapminder()
+sales_df = get_data()
 
 with tab1:
     st.header("Welcome!")
@@ -60,7 +61,7 @@ with tab3:
     st.plotly_chart(fig2)
 
 with tab4:
-    sales_df = get_data()
+    
     st.write("Data preview:", sales_df.head())
     
     # ----------------------------------------------------
@@ -69,7 +70,7 @@ with tab4:
     line_fig = px.line(
         sales_df,
         x="month",
-        y="total_orders",
+        y="revenue",
         title="Line Chart"
     )
     st.plotly_chart(line_fig, use_container_width=True)
@@ -80,7 +81,7 @@ with tab4:
     scatter_fig = px.scatter(
         sales_df,
         x="month",
-        y="nb_users",
+        y="average_basket",
         title="Scatter Plot"
     )
     st.plotly_chart(scatter_fig, use_container_width=True)
